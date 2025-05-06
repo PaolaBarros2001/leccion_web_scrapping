@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taller Práctico: Web Scraping en Twitter</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f8fa;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        h1 {
+            color: #1DA1F2;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .question {
+            background-color: #F5F8FA;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 4px solid #1DA1F2;
+        }
+        .question h3 {
+            margin-top: 0;
+            color: #1DA1F2;
+        }
+        .twitter-widget {
+            border: 1px solid #E1E8ED;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 20px 0;
+            background: white;
+            max-width: 500px;
+        }
+        .tweet-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .tweet-avatar {
+            width: 48px;
+            height: 48px;
+            background-color: #ccc;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .tweet-user {
+            flex-grow: 1;
+        }
+        .tweet-user strong {
+            display: block;
+        }
+        .tweet-user span {
+            color: #657786;
+            font-size: 14px;
+        }
+        .tweet-content {
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        .tweet-stats {
+            color: #657786;
+            font-size: 14px;
+        }
+        .code-block {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Consolas', monospace;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        .options {
+            margin: 20px 0;
+        }
+        .option {
+            margin: 15px 0;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #E1E8ED;
+        }
+        .option:hover {
+            background-color: #E8F5FD;
+            border-color: #1DA1F2;
+        }
+        .option input {
+            margin-right: 10px;
+        }
+        .result {
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            display: none;
+        }
+        .correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .btn {
+            background-color: #1DA1F2;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 40px auto 0;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #1991DB;
+        }
+        .progress-container {
+            width: 100%;
+            background-color: #E1E8ED;
+            border-radius: 5px;
+            margin: 30px 0;
+        }
+        .progress-bar {
+            height: 10px;
+            background-color: #1DA1F2;
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        .final-score {
+            text-align: center;
+            font-size: 24px;
+            margin: 30px 0;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Taller Práctico: Web Scraping en Twitter/X</h1>
+        <p style="text-align: center; color: #657786;">Selecciona el código correcto para cada escenario</p>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        
+        <!-- Pregunta 1 -->
+        <div class="question" id="question-1">
+            <h3>1. ¿Cómo extraerías el nombre de usuario (@handle) de este tweet?</h3>
+            
+            <div class="twitter-widget">
+                <div class="tweet-header">
+                    <div class="tweet-avatar"></div>
+                    <div class="tweet-user">
+                        <strong>Ana Pérez</strong>
+                        <span>@ana_perez · 2h</span>
+                    </div>
+                </div>
+                <div class="tweet-content">
+                    Aprendiendo sobre web scraping en Twitter. ¿Alguien tiene ejemplos prácticos?
+                </div>
+                <div class="tweet-stats">
+                    ♥ 24 🔄 5
+                </div>
+            </div>
+            
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q1" value="a">
+                    <div class="code-block">driver.find_element(By.CLASS_NAME, 'username').text</div>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q1" value="b">
+                    <div class="code-block">driver.find_element(By.XPATH, '//span[contains(text(), "@")]').text</div>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q1" value="c">
+                    <div class="code-block">driver.find_element(By.CSS_SELECTOR, 'div[data-testid="User-Name"] span:last-child').text</div>
+                </label>
+            </div>
+            <div class="result" id="result-1"></div>
+        </div>
+        
+        <!-- Pregunta 2 -->
+        <div class="question" id="question-2">
+            <h3>2. Para extraer estadísticas de interacciones (likes, retweets), ¿cuál es el mejor enfoque?</h3>
+            
+            <div class="twitter-widget">
+                <div class="tweet-header">
+                    <div class="tweet-avatar"></div>
+                    <div class="tweet-user">
+                        <strong>Carlos Ruiz</strong>
+                        <span>@carlos_teach · 5h</span>
+                    </div>
+                </div>
+                <div class="tweet-content">
+                    Nuevo tutorial: Web scraping con Python y Selenium. ¡Próximamente en mi blog!
+                </div>
+                <div class="tweet-stats">
+                    ♥ 142 🔄 28
+                </div>
+            </div>
+            
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q2" value="a">
+                    <div class="code-block">driver.find_elements(By.CLASS_NAME, 'tweet-stat')</div>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q2" value="b">
+                    <div class="code-block">driver.find_elements(By.XPATH, '//div[@role="group"]//span[@data-testid="app-text-transition-container"]')</div>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q2" value="c">
+                    <div class="code-block">driver.find_elements(By.TAG_NAME, 'button')[3:6]</div>
+                </label>
+            </div>
+            <div class="result" id="result-2"></div>
+        </div>
+        
+        <!-- Pregunta 3 -->
+        <div class="question" id="question-3">
+            <h3>3. ¿Cómo verificarías si un tweet es un retweet?</h3>
+            
+            <div class="twitter-widget">
+                <div style="color: #657786; font-size: 14px; margin-bottom: 10px;">
+                    <span>🔁 Retwitteado por María López</span>
+                </div>
+                <div class="tweet-header">
+                    <div class="tweet-avatar"></div>
+                    <div class="tweet-user">
+                        <strong>Web Scraping News</strong>
+                        <span>@webscraping_news · 10h</span>
+                    </div>
+                </div>
+                <div class="tweet-content">
+                    Twitter ha actualizado su estructura HTML. Revisa nuestros nuevos selectores para scraping.
+                </div>
+                <div class="tweet-stats">
+                    ♥ 89 🔄 15
+                </div>
+            </div>
+            
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q3" value="a">
+                    <div class="code-block">'retweet' in driver.page_source</div>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q3" value="b">
+                    <div class="code-block">driver.find_element(By.XPATH, '//span[@data-testid="socialContext"]').text</div>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q3" value="c">
+                    <div class="code-block">'🔁' in tweet_element.text</div>
+                </label>
+            </div>
+            <div class="result" id="result-3"></div>
+        </div>
+        
+        <!-- Pregunta 4 -->
+        <div class="question" id="question-4">
+            <h3>4. Para extraer imágenes de tweets, ¿cuál selector es más confiable?</h3>
+            
+            <div class="twitter-widget">
+                <div class="tweet-header">
+                    <div class="tweet-avatar"></div>
+                    <div class="tweet-user">
+                        <strong>Data Science</strong>
+                        <span>@datascience · 1d</span>
+                    </div>
+                </div>
+                <div class="tweet-content">
+                    Ejemplo de tweet con imágenes para análisis de scraping:
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin: 10px 0;">
+                    <div style="background: #eee; height: 100px; border-radius: 8px;"></div>
+                    <div style="background: #ddd; height: 100px; border-radius: 8px;"></div>
+                </div>
+                <div class="tweet-stats">
+                    ♥ 324 🔄 42
+                </div>
+            </div>
+            
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q4" value="a">
+                    <div class="code-block">driver.find_elements(By.TAG_NAME, 'img')</div>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q4" value="b">
+                    <div class="code-block">driver.find_elements(By.XPATH, '//img[contains(@src, "pbs.twimg.com/media")]')</div>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q4" value="c">
+                    <div class="code-block">driver.find_elements(By.CSS_SELECTOR, 'div[aria-label="Image"] img')</div>
+                </label>
+            </div>
+            <div class="result" id="result-4"></div>
+        </div>
+        
+        <button class="btn" id="check-btn">Verificar Respuestas</button>
+        
+        <div class="final-score" id="final-score"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkBtn = document.getElementById('check-btn');
+            const progressBar = document.getElementById('progress-bar');
+            const finalScore = document.getElementById('final-score');
+            
+            // Respuestas correctas
+            const correctAnswers = {
+                q1: 'c',
+                q2: 'b',
+                q3: 'b',
+                q4: 'b'
+            };
+            
+            // Explicaciones detalladas
+            const explanations = {
+                q1: {
+                    correct: "CORRECTO: Usar data-testid='User-Name' es el método más confiable actualmente en Twitter/X",
+                    incorrect: "INCORRECTO: El selector correcto es: driver.find_element(By.CSS_SELECTOR, 'div[data-testid=\"User-Name\"] span:last-child').text"
+                },
+                q2: {
+                    correct: "CORRECTO: Los stats están en elementos con data-testid='app-text-transition-container' dentro de div[role='group']",
+                    incorrect: "INCORRECTO: El selector correcto usa data-testid para mayor confiabilidad"
+                },
+                q3: {
+                    correct: "CORRECTO: El contexto social (retweets) está en elementos con data-testid='socialContext'",
+                    incorrect: "INCORRECTO: Aunque el símbolo 🔁 puede aparecer, no es un método confiable"
+                },
+                q4: {
+                    correct: "CORRECTO: Las imágenes de tweets siempre contienen 'pbs.twimg.com/media' en su URL",
+                    incorrect: "INCORRECTO: El patrón de URL es más confiable que selectores visuales"
+                }
+            };
+            
+            checkBtn.addEventListener('click', function() {
+                let score = 0;
+                const totalQuestions = Object.keys(correctAnswers).length;
+                
+                // Verificar cada pregunta
+                for (let i = 1; i <= totalQuestions; i++) {
+                    const questionId = `q${i}`;
+                    const selectedOption = document.querySelector(`input[name="${questionId}"]:checked`);
+                    const resultDiv = document.getElementById(`result-${i}`);
+                    
+                    if (selectedOption) {
+                        if (selectedOption.value === correctAnswers[questionId]) {
+                            score++;
+                            resultDiv.textContent = "✅ " + explanations[questionId].correct;
+                            resultDiv.className = "result correct";
+                        } else {
+                            resultDiv.textContent = "❌ " + explanations[questionId].incorrect;
+                            resultDiv.className = "result incorrect";
+                        }
+                        resultDiv.style.display = 'block';
+                    }
+                }
+                
+                // Actualizar progreso
+                const percentage = (score / totalQuestions) * 100;
+                progressBar.style.width = `${percentage}%`;
+                
+                // Mostrar puntaje final
+                finalScore.textContent = `Resultado: ${score} de ${totalQuestions} correctas (${Math.round(percentage)}%)`;
+                finalScore.style.display = 'block';
+                
+                // Desplazar hacia el resultado
+                finalScore.scrollIntoView({ behavior: 'smooth' });
+                
+                // Cambiar texto del botón
+                checkBtn.textContent = "Intentar de nuevo";
+                checkBtn.onclick = function() {
+                    window.location.reload();
+                };
+            });
+        });
+    </script>
+</body>
+</html>
